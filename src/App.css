@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -52,4 +55,19 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+#score {
+  padding-top: 20px;
+}
+
+#item {
+  padding: 0.5em;
+  margin: 2px;
+  background-color: aliceblue;
+}
+
+#item:hover {
+  cursor: pointer;
+  background-color: cornflowerblue;
 }

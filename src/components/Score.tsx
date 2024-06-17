@@ -4,7 +4,7 @@ interface Props {
   }
 
 function Score({children}: Props) {
-    return <div>Score: {children}</div>
+    return <div id="score">Score: {children}</div>
 }
 
 export default Score;
