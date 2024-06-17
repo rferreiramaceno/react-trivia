@@ -35,8 +35,21 @@
 
 .card {
   padding: 2em;
+
+
+  height: 200px !important;
+  width: 300px !important;
+  transition: transform 0.3s ease;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
 }
