@@ -71,3 +71,19 @@ body {
   cursor: pointer;
   background-color: cornflowerblue;
 }
+
+#item-wrong {
+  padding: 0.5em;
+  margin: 2px;
+  background-color: rgb(237, 89, 99);
+}
+
+#item-correct {
+  padding: 0.5em;
+  margin: 2px;
+  background-color: rgb(108, 223, 106)
+}
+
+#question {
+  margin-bottom: 10px;
+}

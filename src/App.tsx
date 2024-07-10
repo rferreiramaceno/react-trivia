@@ -1,17 +1,14 @@
 import { useState } from "react";
 import "./App.css";
 import Card from "./components/Card";
-import MyBtn from "./components/Mybtn";
+import MyBtn from "./components/MyButton";
+import "bootstrap/dist/css/bootstrap.css";
 import Score from "./components/Score";
-import Item from "./components/Item";
-
-let num = 0;
-let points = 0;
-let checkedItems: string[] = [];
+import Alert from "./components/Alert";
 
 const cards = [
   {question: "Which of these movies is not based on a book?",answer: "Avatar",items: ["Little Women", "The Hunger Games", "The Godfather", "Avatar"],},
-  {question:'Who directed the film adaptation of J.R.R. Tolkien\'s "The Lord of the Rings" trilogy?',answer: "Peter Jackson",items: ["Christopher Nolan","Peter Jackson","Steven Spielberg","George Lucas",],},
+  {question:'Who directed the film adaptation of J.R.R. Tolkien\'s "The Lord of the Rings" trilogy?',answer: "Peter Jackson",items: ["Ridley Scott","Peter Jackson","David Fincher","George Lucas",],},
   {question:'In the "Harry Potter" film series, who played the character Hermione Granger?',answer: "Emma Watson",items: ["Emma Watson", "Emma Stone", "Emma Roberts", "Emma Thompson"],},
   {question:"Which of Jane Austen's novels was adapted into the movie starring Keira Knightley?",answer: "Pride and Prejudice",items: ["Sense and Sensibility","Mansfield Park","Pride and Prejudice","Emma",],},
   {question:"Which 2013 film, directed by Alfonso Cuarón, follows two astronauts stranded in space after their shuttle is destroyed?",answer: "Gravity",items: ["Astronomical", "Gravity", "Black Hole", "Orbit"],},
@@ -25,72 +22,78 @@ const cards = [
   {question:'In the movie "Blade Runner," what is the term used for bioengineered beings that are virtually identical to humans?',answer: "Replicants",items: ["Robots", "Terminators", "Replicants", "A.I."],},
   {question:'In "The Fifth Element," who plays the character Korben Dallas, a former special forces major?',answer: "Bruce Willis",items: ["Jason Statham","Bruce Willis","Vin Diesel","Sylvester Stallone",],},
   {question:'In the "Star Wars" saga, what is the name of the desert planet where Anakin Skywalker and Luke Skywalker were raised?',answer: "Tatooine",items: ["Dimidium", "Halla", "Bambaruush", "Tatooine"],},
-  {question: 'Who was known as the "King of Hollywood" during the Golden Age?',answer: "Clark Gable",items: ["Clark Gable", "Cary Grant", "Humphrey Bogart", "Henry Fonda"],},
+  {question: 'Who was known as the "King of Hollywood" during the Golden Age?',answer: "Clark Gable",items: ["Clark Gable", "Cary Grant", "Marlon Brando", "Henry Fonda"],},
   {question:'Which legendary actress starred in "Gone with the Wind" and won an Oscar for her role?',answer: "Vivien Leigh",items: ["Olivia de Havilland","Hattie McDaniel","Alicia Rhett","Vivien Leigh",],},
   {question:'Which iconic film director was responsible for classics like "Citizen Kane" and "The Third Man"?',answer: "Orson Welles",items: ["Orson Welles", "Alfred Hitchcock", "John Ford", "John Huston"],},
   {question:'Who played the role of Rick Blaine in "Casablanca," one of the most celebrated films of the era?',answer: "Humphrey Bogart",items: ["Paul Henreid", "Humphrey Bogart", "Peter Lorre", "Claude Rains"],},
   {question:"Which film won the first Academy Award for Best Picture in 1929?",answer: "Wings",items: ["7th Heaven", "The Parade", "The Racket", "Wings"],},
 ];
 
+let points = 0;
+let wrongAnswers : string[] = [];
+let rightAnswers : string[] = [];
+let gameOver = false;
+
 function App() {
   const [score, setScore] = useState(0);
-
-  const [card, setCard] = useState(cards[num].question);
+  let [currentCard, setCurrentCard] = useState(0);
+  const [selectedItem, setSelectedItem] = useState("");
 
   const goBack = () => {
-    if (num > 0) {
-      num--;
-      setCard(cards[num].question);
+    if (currentCard > 0) {
+      setCurrentCard(--currentCard);
     }
   };
 
   const nextCard = () => {
-    if (num < cards.length - 1) {
-      num++;
-      setCard(cards[num].question);
+    if (currentCard < cards.length - 1) {
+      setCurrentCard(++currentCard)
     }
   };
 
-  function checkGuess(guess: string) {
-    if (guess === cards[num].answer && !checkedItems.includes(guess)) {
-      setScore(++points);
-      checkedItems.push(guess);
-      if (points == 20) {
-        alert("You Won!!!");
-      } else alert("Correct!");
-    } else {
-      if (checkedItems.includes(guess)) {
-        alert("You've already guessed the answer.");
-      } else {
-        alert("Wrong!");
-      }
-    }
-  }
-
   return (
     <>
+      {gameOver && wrongAnswers.length >= 10 &&  <Alert alertOption={1}>You Lost!!!</Alert>}
+      {gameOver && rightAnswers.length > 10 &&  <Alert alertOption={2}>You Won!!!</Alert>}
+      
       <div className="App">
         <div className="row">
           <div className="col">
             <MyBtn onClick={goBack}>Back</MyBtn>
           </div>
-          <div className="col">
-            <Card>{card}</Card>
-            {cards[num].items.map((element, index) => {
-              return (
-                <Item key={index} onClick={() => checkGuess(element)}>
-                  {element}
-                </Item>
-              );
-            })}
+          <div className="col">            
+            <h4 id="question">Question {currentCard + 1}</h4> 
+          
+            <Card 
+                  onSelectItem={
+                    (item:string) => {
+                      setSelectedItem(item);
+                      // console.log(selectedItem);
+                      if(!gameOver) {
+                        
+                        if(
+                          item == cards[currentCard].answer){rightAnswers.push(item); ++points; setScore(points);
+                        }
+                        else {
+                          wrongAnswers.push(item);
+                        }
+                      } 
+                        if(wrongAnswers.length + rightAnswers.length == 20) {gameOver = true};
+                    }} 
+                  
+                  items = {cards[currentCard].items} answer={cards[currentCard].answer}>
+
+                {cards[currentCard].question}
+            
+            </Card>
+         
           </div>
           <div className="col">
             <MyBtn onClick={nextCard}>Next</MyBtn>
           </div>
         </div>
       </div>
-
-      <Score>{score}</Score>
+      <Score>{score} / {cards.length}</Score>
     </>
   );
 }

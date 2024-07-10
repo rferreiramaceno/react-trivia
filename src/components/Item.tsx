@@ -1,14 +1,13 @@
-
-
 interface Props {
-    children: string;
     onClick: () => void;
+    item: string;
+    id?: string;
 }
 
-function Item({children, onClick}: Props) { 
+function Item({item, onClick, id}: Props) { 
 
-        return <div id="item" onClick={onClick}>{children}</div>  
-
+    return <div id={id} onClick={onClick}>{item}</div>
+    
 }
 
 export default Item;

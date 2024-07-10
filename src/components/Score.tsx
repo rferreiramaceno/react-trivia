@@ -1,6 +1,7 @@
+import { ReactNode } from "react";
+
 interface Props {
-    children: number;
-  
+    children: ReactNode;
   }
 
 function Score({children}: Props) {
